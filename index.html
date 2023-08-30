@@ -30,6 +30,17 @@
 <p>注意：所有步骤请不要轻易尝试，目前仍处于测试阶段<span class="notice">（因为出了问题我负责不了，我还怕我的出了问题）</span></p>
 <mark>测试阻塞中：没有nfc读写器而且家里没有有nfc功能的手机（大悲）</mark>
 <p>如果你完成了测试项中的某一项内容或者你是计算机或者嵌入式大牛，请尽快与我取得联系，email： femd.eu.org（开启了catch-all模式，你可以从任意一个地方联系到我，比如  666@femd.eu.org  或者 sife@femd.eu.org ）</p>
+或者使用下方留言框发送文本消息<br>
+<input id="g" /><button id="bg" onclick="gt();">提交留言</button><br>
+<script>
+function gt(){
+	fetch("https://eo8htsukjtygbsz.m.pipedream.net/cardmessage",{"body": JSON.stringify({"message":document.querySelector("#g").value}),"method": "POST"}).then(e=>{
+	document.querySelector("#g").value="";
+	document.querySelector("#bg").innerText="留言成功";
+	setTimeout(()=>{document.querySelector("#bg").innerText="提交留言"},3000);
+});
+}
+</script>
 <span class="notice">为了兼容性本页面使用了超级难看的界面</span><br>
 <span class="notice">如果你感觉开发者破解的真LJ就快来2023级与破解者对线</span>
 <h2>测试项</h2>

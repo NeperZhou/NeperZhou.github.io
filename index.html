@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+html{
+    margin:0px;
+    height:100%;
+    width:100%;
+}
+#theta,#webt{
+    position: fixed;
+    left: 0px;
+    top: 0px;
+}
+</style>
+</head>
+<body style="margin:0px;height:100%;width:100%;overflow: hidden;">
+<input type="range" min="0" max="628.3185307179586" id="theta" style="z-index:1;"/>
+<script>
+window.w=document.body.offsetWidth;
+window.h=document.body.offsetHeight;
+window.theta=document.getElementById('theta');
+theta.oninput=function(){
+    //console.log(this.value/100);
+    webctx.clearRect(0,0,w,h);
+    ctx.clearRect(0,0,w,h);
+    window.tsc=[Math.cos(theta.value/100),Math.sin(theta.value/100)];
+    webdraw();
+    drawcircle();
+}
+var webt=document.createElement("canvas");
+webt.id="webt";
+webt.width=w;
+webt.height=h;
+document.body.appendChild(webt);
+window.webctx=webt.getContext('2d');
+window.tsc=[Math.cos(theta.value/100),Math.sin(theta.value/100)]
+function webdraw(){
+    webctx.beginPath();
+    webctx.moveTo(0,h/2);
+    webctx.lineTo(w,h/2);
+    webctx.lineTo(w-5,h/2-3);
+    webctx.lineTo(w-5,h/2+3);
+    webctx.lineTo(w,h/2);
+    webctx.lineWidth = 3;
+    webctx.stroke();
+    var webymax=Math.sqrt((w/2)**2+(h/2)**2);
+    webctx.beginPath();
+    var oldw=w/2+tsc[0]*webymax;
+    var oldh=h/2-tsc[1]*webymax;
+    webctx.moveTo(oldw,oldh);
+    webctx.lineTo(w-oldw,h-oldh);
+    webctx.lineWidth = 3;
+    webctx.stroke();
+}
+webdraw();
+var t=document.createElement("canvas");
+t.id="graph";
+t.width=w;
+t.height=h;
+document.body.appendChild(t);
+window.ctx=t.getContext('2d');
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+/*function dotdraw(ox,oy,r=1){
+    if(!oy&&oy!=0){return false;}
+    ctx.beginPath(); 
+    var x=w/2+ox+oy*tsc[0];
+    var y=h/2-oy*tsc[1];
+    ctx.arc(x,y,r, 0, 2*Math.PI);
+    //ctx.fillStyle = "rgba(255,255,255,.8)";
+    ctx.stroke();
+}*/
+window.str=["Math.sqrt(10000-i**2)","-Math.sqrt(10000-i**2)"]
+function drawcircle(str=window.str){
+    str.forEach(e=>{
+    ctx.beginPath();
+    var i=Math.floor(-w/2-2);
+    var f=0;
+    function d(ox,oy){
+        if(f){ctx.moveTo(w/2+ox+oy*tsc[0],h/2-oy*tsc[1])}else{
+            ctx.lineTo(w/2+ox+oy*tsc[0],h/2-oy*tsc[1])
+        }
+    }
+    for(;i<=Math.floor(w/2+2);i++){d(i,eval(e));};
+    //for(var i=Math.floor(-w/2-2);i<=Math.floor(w/2+2);i++){if(i**2<h/2+10){dotdraw(i,i**2);}};
+    //ctx.closePath();
+    ctx.stroke();
+    });
+}
+drawcircle();
+</script>
+</body>
+</html>

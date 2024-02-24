@@ -51,9 +51,9 @@
     <span style="display:flex" id="line1"><span>Command></span><input type="text" id="inpot" aria-autocomplete="none"
             onkeydown="(async()=>{await get()})()"></span>
     <script>
-        document.body.onclick=()=>{
+        /*document.body.onclick=()=>{
             document.getElementById("inpot").focus();
-        }
+        }*/
         oldhis = [];
         a = 1;
         textcolor = "white";
@@ -187,8 +187,13 @@
                 }
             }else if(command=="watch"){
                 if(spi(n[1], " ", 1)[0].length){
-                    var j=await fetch(`https://worker.femd.eu.org/json?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`).then(e=>e.text());
-                    return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}"/><br>`+j
+                    var stat;
+                    var j=await fetch(`https://worker.femd.eu.org/json?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                    if(stat==404){
+                        return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该人信息，后期不断补充数据可能会有结果"
+                    }else{
+                        return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}"/><br>`+j
+                    }
                 }else{
                     return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
                 }

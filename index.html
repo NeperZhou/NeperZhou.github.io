@@ -86,7 +86,7 @@
         }
         function shc() {
             if (event.ctrlKey && event.keyCode == 76) {//Ctrl+L 清屏
-                document.getElementById("all").innerHTML = "<span>Developers Union Shell(version: 1.14)<br>Developers Union keeps all the rights.</span><br><span style=\"display:flex\" id=\"line1\"><span>cmd></span><input type=\"text\" id=\"inpot\" onkeydown=\"get()\"></span>";
+                document.getElementById("all").innerHTML = `<span>YZ Data Shell ( 一中社工库 )<br>Sife keeps all the rights.</span><br><span style="display:flex" id="line1"><span>Command></span><input type="text" id="inpot" aria-autocomplete="none" onkeydown="(async()=>{await get()})()"></span>`;
                 document.querySelectorAll('span')[0].style.color = textcolor;
                 document.querySelectorAll('span')[0].style.backgroundColor = backcolor;
                 document.querySelectorAll('span')[1].style.color = textcolor;

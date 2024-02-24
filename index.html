@@ -79,6 +79,10 @@
             spiArry.push(spistr);
             return spiArry;
         }
+        var ghj=Object.fromEntries(new URL(location.href).search.slice(1).split("&").map(e=>e.split("=")))
+        if(ghj.key&&ghj.key.length){
+            localStorage.key=ghj.key;
+        }
         function shc() {
             if (event.ctrlKey && event.keyCode == 76) {//Ctrl+L 清屏
                 document.getElementById("all").innerHTML = "<span>Developers Union Shell(version: 1.14)<br>Developers Union keeps all the rights.</span><br><span style=\"display:flex\" id=\"line1\"><span>cmd></span><input type=\"text\" id=\"inpot\" onkeydown=\"get()\"></span>";

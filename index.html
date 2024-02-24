@@ -81,7 +81,7 @@
         }
         var ghj=Object.fromEntries(new URL(location.href).search.slice(1).split("&").map(e=>e.split("=")))
         if(ghj.key&&ghj.key.length){
-            localStorage.key=ghj.key;
+            localStorage.Sifekey=ghj.key;
         }
         function shc() {
             if (event.ctrlKey && event.keyCode == 76) {//Ctrl+L 清屏

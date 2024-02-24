@@ -3,17 +3,11 @@
 
 <head>
     <style>
-        html{
-            width: 100%;
-            height: 100%;
-        }
         body {
             margin: 0;
             background-color: black;
             color: white;
             padding: 20px;
-            width: 100%;
-            height: 100%;
             line-height: 1.5715;
             font-size: 16px;
             font-family: Consolas, 'Courier New', monospace;
@@ -182,7 +176,16 @@
                 return "";
             }else if(command=="id"){
                 if(spi(n[1], " ", 1)[0].length){
-                    return await fetch(`http://worker.femd.eu.org/id?search=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`)
+                    return await fetch(`https://worker.femd.eu.org/id?search=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`).then(e=>e.text())
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command=="watch"){
+                if(spi(n[1], " ", 1)[0].length){
+                    var j=await fetch(`https://worker.femd.eu.org/json?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`).then(e=>e.text());
+                    return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}"/><br>`+j
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
                 }
             }else if(command == "key"){
                 if(spi(n[1], " ", 1)[0].length){

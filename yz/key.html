@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aes-js/3.1.2/index.min.js"></script>
+    <script>
+
+var key = [1523,2775,2742,2741,225,1447,2778,2741,1597,2777,1444,1370,228,1370,1372,228,1370,1370,1370,225,225,225,225,1518,2741,2812,2741,2814,1560,2744,2781,2817] //aesjs.utils.utf8.toBytes(key);
+function U(ad,n){var d=Array.from(ad);for(var i=d.length;i<n;i++){d.push(32)};return new Uint8Array(d)} 
+function add(t){//add(name) to get key
+    var aes = new aesjs.AES(new Uint16Array(key.map(e=>Trans(e,37,7))));
+    return aesjs.utils.hex.fromBytes(aes.encrypt(U(aesjs.utils.utf8.toBytes(t),16)));
+}
+
+function reduce(t){//reduce(key) to get name
+    var aes = new aesjs.AES(new Uint16Array(key.map(e=>Trans(e,37,7))));
+    return aesjs.utils.utf8.fromBytes(aes.decrypt(aesjs.utils.hex.toBytes(t))).trim()
+}
+function Trans(j,n,w){
+    var k=j;
+    var l=0;
+    var king=1;
+    while(k){
+        l+=king*(k%n);
+        king*=w;
+        k=(k-(k%n))/n;
+    }
+    return l;
+}//7=>37
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

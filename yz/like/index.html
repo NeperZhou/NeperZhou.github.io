@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Likes</title>
+</head>
+<body>
+Writing and Loading...
+<script>
+fetch("./data.txt").then(e=>e.json()).then(e=>{
+    var f="";
+    e.forEach(w=>{
+        f+=`<img src="${atob(w)}.png" width="480" heght="640" />`
+    });
+    document.write(f);
+})
+</script>
+</body>
+</html>

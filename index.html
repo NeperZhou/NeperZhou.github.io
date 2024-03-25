@@ -158,28 +158,7 @@
         async function amazing(str) {
             var n = spi(str, " ", 1);
             let command = n[0].toLowerCase();
-            if (command == "title") {
-                document.title = n[1];
-                return (1);
-            } else if (command == "search" || command == 'sh') {
-                var O = {
-                    baidu: "https://www.baidu.com/s?wd=",
-                    baidudev: "https://kaifa.baidu.com/searchPage?wd=",
-                    bilibili: "https://search.bilibili.com/all?keyword=",
-                    music: "https://music.163.com/#/search/m/?s=",
-                    bing: "https://global.bing.com/search?q=",
-                    zhihu: "https://www.zhihu.com/search?q=",
-                    github: "https://github.com/search?q=",
-                };
-                if (O[spi(n[1], " ", 1)[0]]) {
-                    window.open(O[spi(n[1], " ", 1)[0]] + spi(n[1], " ", 1)[1]);
-                } else if (spi(n[1], " ", 1)[0].toLowerCase() == 'diy') {//自定义搜索  search DIY 数据源 搜索内容
-                    window.open(spi(n[1], " ", 2)[1] + spi(n[1], " ", 2)[2]);
-                } else {
-                    return ("<span class=\"jing\" style='color:red;'>error: Insufficient parameters</span>");
-                };
-                return (1);
-            } else if (command == 'clear') {
+            if (command == 'clear') {
                 document.getElementById("all").innerHTML = `<span>YZ Data Shell ( 一中社工库 )<br>Sife keeps all the rights.</span><br><span style="display:flex" id="line1"><span>Command></span><input type="text" id="inpot" aria-autocomplete="none" onkeydown="(async()=>{await get()})()"></span>`;;
                 document.querySelectorAll('span')[0].style.color = textcolor;
                 document.querySelectorAll('span')[0].style.backgroundColor = backcolor;
@@ -195,12 +174,13 @@
                 }
             }else if(command=="watch"){
                 if(spi(n[1], " ", 1)[0].length){
+                    var f=spi(n[1], " ", 1)[1]||"2023";
                     var stat;
-                    var j=await fetch(`https://worker.femd.eu.org/json?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                    var j=await fetch(`https://worker.femd.eu.org/json?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
                     if(stat==404){
                         return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该人信息，后期不断补充数据可能会有结果"
                     }else{
-                        return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}"/><br>`+j
+                        return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}"/><br>`+j
                     }
                 }else{
                     return ("<span style=\"color:red;\">error: The instruction does not exist</span>");

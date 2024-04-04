@@ -55,8 +55,8 @@
 
 <body id="all" onkeydown="shc()">
     <span>YZ Data Shell ( 一中社工库 )<br>Sife keeps all the rights.</span><br>
-    <span style="display:flex" id="line1"><span>Command></span><input type="text" id="inpot" aria-autocomplete="none"
-            onkeydown="(async()=>{await get()})()"></span>
+    <span style="display:flex" id="line1"><span>Command></span><!--<input type="text" id="inpot" aria-autocomplete="none"
+            onkeydown="(async()=>{await get()})()">-->维护中</span>
     <script>
         /*document.body.onclick=()=>{
             document.getElementById("inpot").focus();
@@ -181,6 +181,40 @@
                         return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该人信息，后期不断补充数据可能会有结果"
                     }else{
                         return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}"/><br>`+j
+                    }
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command=="school"){
+                if(spi(n[1], " ", 1)[0].length){
+                    var f=spi(n[1], " ", 1)[1]||"2023";
+                    var stat;
+                    var j=await fetch(`https://worker.femd.eu.org/school?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                    if(stat==404){
+                        return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该信息，后期不断补充数据可能会有结果"
+                    }
+                    return j;
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command=="file"){//file look file||file id
+                if(spi(n[1], " ", 1)[0].length){
+                    if(spi(n[1], " ", 1)[1].length){
+                        var stat;
+                        var f="2023"
+                        var j=await fetch(`https://worker.femd.eu.org/file?id=${spi(n[1], " ", 1)[0]}&u=${spi(n[1], " ", 1)[1]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                        if(stat==404){
+                            return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该信息，后期不断补充数据可能会有结果"
+                        }
+                        return j;
+                    }else{
+                        var stat;
+                        var f="2023"
+                        var j=await fetch(`https://worker.femd.eu.org/file?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                        if(stat==404){
+                            return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该信息，后期不断补充数据可能会有结果"
+                        }
+                        return j;
                     }
                 }else{
                     return ("<span style=\"color:red;\">error: The instruction does not exist</span>");

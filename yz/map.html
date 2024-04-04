@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一中鸟瞰图</title>
+</head>
+<body style="padding: 100px;">
+<canvas id="ctx" width="2000" height="2000"></canvas>
+<script>
+const l=5//5px/1mm=>50cm/0.5m
+const ctx=document.querySelector("#ctx").getContext('2d');
+var pos={x:0,y:0};
+ctx.beginPath();
+
+ctx.moveTo(5,1);//Walls
+ctx.lineTo(2000-1,1);
+ctx.lineTo(2000-1,2000-5);
+ctx.lineTo(2000-1-115*l,2000-5);
+ctx.moveTo(2000-1-115*l-20*l,2000-5)
+ctx.lineTo(5,2000-5);
+ctx.lineTo(5,1);
+
+function M(x,y){
+    pos.x+=x*l;
+    pos.y+=y*l;
+    ctx.moveTo(pos.x,pos.y);
+}
+function L(x,y){
+    pos.x+=x*l;
+    pos.y+=y*l;
+    ctx.lineTo(pos.x,pos.y);
+}
+function J(x,y){
+    L(x,0);
+    L(0,y);
+    L(-x,0);
+    L(0,-y);
+}//矩形x,y为对点相对坐标
+
+M(2000/l,2000/l-1);
+J(-115,-10);
+
+var pos1={x:0,y:0};pos1.x=pos.x;pos1.y=pos.y;//南门左
+M(-135,0);
+J(135-2000/l+1,-10);
+pos.x=pos1.x;pos.y=pos1.y;
+
+pos1={x:0,y:0};pos1.x=pos.x;pos1.y=pos.y;//女宿
+M(-45,-10);
+L(0,-15-18);
+L(-96,0);
+L(0,-26);
+L(-13,0);
+            L(0,-90);
+pos.x=pos1.x;pos.y=pos1.y;
+
+M(-115-20-43,-15-10);
+J(-63,-9);
+
+pos1={x:0,y:0};pos1.x=pos.x;pos1.y=pos.y;//左户
+M(-63-7,0);
+J(-61,-10);
+M(-61-9,0);
+J(1-pos.x/l,-10);
+pos.x=pos1.x;pos.y=pos1.y;
+
+M(0,-13);
+J(-63,-35);
+M(0,-19-35);
+J(-36,-5);
+M(-2,-9);
+J(-24,-5);
+M(-24-2,0);
+J(-35,-5);
+M(24+4,-5-5);
+J(-63,-31);
+
+ctx.stroke();
+</script>
+</body>
+</html>

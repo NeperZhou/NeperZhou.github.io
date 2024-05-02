@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science</title>
+</head>
+<body style="margin: 0;">
+<canvas id="ctx" width="1000" height="700" style="border: 1px solid gray;"></canvas><button onclick="setInterval(()=>{an()},20)">Play</button>
+<script>
+var obj={};
+class V{
+    constructor(x,y,e=0){//e:if unit vector
+        if(e){
+            var l=Math.sqrt(x**2+y**2);
+            this.x=x/l;
+            this.y=y/l;
+        }else{
+            this.x=x;
+            this.y=y;
+        }
+    }
+    add(v){
+        this.x+=v.x;
+        this.y+=v.y;
+    }
+    add2(v){
+        return new V(this.x+v.x,this.y+v.y)
+    }
+    mult(n){
+        return new V(this.x*n,this.y*n);
+    }
+    value(){
+        return Math.sqrt(this.x**2+this.y**2)
+    }
+    To1(){
+        var l=this.value();
+        return new V(this.x/l,this.y/l);
+    }
+    fu(){
+        return new V(-this.x,-this.y)
+    }
+}
+function addobj(name,m,x0,y0,v0){
+    obj[name]={m,x:x0,y:y0,v:v0};
+}
+function next(Fs,fps){//fps:Hz/s//Fs:[[obj0,size,v],..]v:单位向量unit vector
+    Fs.forEach(e=>{
+        var o=obj[e[0]];
+        o.y+=(o.v.y)*(1/fps);
+        o.x+=(o.v.x)*(1/fps);
+        o.v.add(e[2].mult(e[1]/(o.m)*(1/fps)));
+    });
+}
+
+
+const ctx=document.querySelector("#ctx").getContext('2d');
+function dp(o){
+    ctx.beginPath();
+    ctx.arc(obj[o].x,obj[o].y,2,0,2*Math.PI);
+    ctx.fillText(o,obj[o].x+5,obj[o].y-5);
+    ctx.fill();
+}
+
+const G=6670;
+//var v2=Math.sqrt(G/110)/(400-250);
+addobj("A",300/*kg*/,200+250,200+250,new V(0,0));
+addobj("B",200,200+400,200+150,new V(0,0));
+addobj("C",100,200+400,200+350,new V(0,0));
+function distance(A,B){
+    return Math.sqrt((obj[A].x-obj[B].x)**2+(obj[A].y-obj[B].y)**2);
+}
+var FF=[];
+function an(){
+    ctx.clearRect(0,0,1000,700);
+    var fAB=G*(obj["A"].m)*(obj["B"].m)/(distance("A","B")**2);
+    var fBC=G*(obj["B"].m)*(obj["C"].m)/(distance("B","C")**2);
+    var fAC=G*(obj["A"].m)*(obj["C"].m)/(distance("A","C")**2);
+    var vAB=new V(obj["B"].x-obj["A"].x,obj["B"].y-obj["A"].y,1).mult(fAB);
+    var vBC=new V(obj["C"].x-obj["B"].x,obj["C"].y-obj["B"].y,1).mult(fBC);
+    var vAC=new V(obj["C"].x-obj["A"].x,obj["C"].y-obj["A"].y,1).mult(fAC);
+    var fA=vAB.add2(vAC);
+    var fC=vAC.fu().add2(vBC.fu());
+    var fB=vBC.add2(vAB.fu());
+    FF=[["A",fA.value(),fA.To1()],["B",fB.value(),fB.To1()],["C",fC.value(),fC.To1()]];
+    dp("A");dp("B");dp("C");
+    next(FF,50);
+}
+</script>
+</body>
+</html>

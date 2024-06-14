@@ -70,9 +70,13 @@ addobj("C",100,200+400,200+350,new V(0,0));
 function distance(A,B){
     return Math.sqrt((obj[A].x-obj[B].x)**2+(obj[A].y-obj[B].y)**2);
 }
+//ctx.fillStyle = 'white';
 var FF=[];
 function an(){
-    ctx.clearRect(0,0,1000,700);
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, 1000,700);
+    ctx.fillStyle = 'black';
+    //ctx.clearRect(0,0,1000,700);
     var fAB=G*(obj["A"].m)*(obj["B"].m)/(distance("A","B")**2);
     var fBC=G*(obj["B"].m)*(obj["C"].m)/(distance("B","C")**2);
     var fAC=G*(obj["A"].m)*(obj["C"].m)/(distance("A","C")**2);
@@ -86,6 +90,48 @@ function an(){
     dp("A");dp("B");dp("C");
     next(FF,50);
 }
+
+
+
+//God EYE
+
+
+const canvas = document.querySelector('canvas'); // 获取canvas元素
+const stream = canvas.captureStream(); // 从canvas捕获MediaStream
+
+const mediaRecorder = new MediaRecorder(stream, {
+  mimeType: 'video/webm' // 输出WebM格式的视频
+});
+var downloadedBlobs=[];
+mediaRecorder.ondataavailable = event => {
+  if (event.data && event.data.size > 0) {
+    // 处理录制的数据
+    // 例如，可以将数据追加到一个数组中，然后将它们下载为一个文件
+    downloadedBlobs.push(event.data);
+  }
+};
+ 
+const eye={};
+eye.start=()=>mediaRecorder.start(); // 开始录制
+ 
+// 在需要停止录制的时候调用
+eye.stop=()=>mediaRecorder.stop();
+ 
+// 示例：下载录制的视频
+mediaRecorder.addEventListener('stop', () => {
+  const superBuffer = downloadedBlobs[0]
+  // 创建一个指向Blob的URL
+  const url = URL.createObjectURL(superBuffer);
+  // 创建一个a标签用于下载
+  const downloadLink = document.createElement('a');
+  downloadLink.href = url;
+  downloadLink.download = 'recordedVideo.webm';
+  // 添加链接到文档并模拟点击
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+});
+document.querySelector("body > button:nth-child(2)").addEventListener("click",()=>eye.start())
 </script>
 </body>
 </html>
